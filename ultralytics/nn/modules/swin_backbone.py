@@ -3,6 +3,8 @@
 
 from __future__ import annotations
 
+from collections.abc import Sequence
+
 import torch.nn as nn
 
 try:
@@ -44,5 +46,20 @@ class SwinT(nn.Module):
 
     def forward(self, x):
         """Return the feature maps for the requested indices."""
+        if hasattr(self.model, "patch_embed"):
+            patch_embed = self.model.patch_embed
+            if hasattr(patch_embed, "img_size") and hasattr(patch_embed, "patch_size"):
+                h, w = x.shape[-2:]
+                img_size = (h, w)
+                if patch_embed.img_size != img_size:
+                    patch_embed.img_size = img_size
+                    patch_size = patch_embed.patch_size
+                    if isinstance(patch_size, Sequence):
+                        patch_h, patch_w = patch_size[0], patch_size[1]
+                    else:
+                        patch_h = patch_w = patch_size
+                    patch_embed.grid_size = (h // patch_h, w // patch_w)
+                    patch_embed.num_patches = patch_embed.grid_size[0] * patch_embed.grid_size[1]
+
         features = self.model(x)
         return list(features)
