@@ -1,6 +1,8 @@
 # YOLOv12 Swin-T backbone configuration
 # Requires timm: `pip install timm`
-# Example: `yolo detect train model=ultralytics/cfg/models/v12/yolov12_swin_t.yaml data=path/to/tomato.yaml epochs=100 imgsz=640 project=tomato-run name=swin_t`
+# Example command:
+#   yolo detect train model=ultralytics/cfg/models/v12/yolov12_swin_t.yaml \
+#     data=path/to/tomato.yaml epochs=100 imgsz=640 project=tomato-run name=swin_t
 # Ensure the dataset YAML declares `nc: 1` and `names: ["tomato"]` for a single-class tomato task.
 
 nc: 1  # number of classes (tomato)
